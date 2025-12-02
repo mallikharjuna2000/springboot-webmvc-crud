@@ -27,8 +27,7 @@ public class EmployeeController {
 	}
 
 	@RequestMapping("/addEmployee")
-	public ModelAndView addEmployee(@RequestParam("name") String name, 
-			@RequestParam("salary") Double salary,
+	public ModelAndView addEmployee(@RequestParam("name") String name, @RequestParam("salary") Double salary,
 			@RequestParam("designation") String designation) {
 		Employee employee = new Employee();
 		employee.setName(name);
@@ -37,11 +36,29 @@ public class EmployeeController {
 		employeeService.saveEmployee(employee);
 		return new ModelAndView("redirect:/");
 	}
-	
+
 	@RequestMapping("/deleteEmployee")
 	public ModelAndView deleteEmployee(@RequestParam Long id) {
 		employeeService.deleteEmployee(id);
 		return new ModelAndView("redirect:/");
 	}
 
+	@RequestMapping("/editEmployeeForm")
+	public ModelAndView editEmployeeForm(@RequestParam Long id) {
+		ModelAndView mav = new ModelAndView("edit-employee-form");
+		Employee employee = employeeService.getEmployeeById(id);
+		mav.addObject("employee", employee);
+		return mav;
+	}
+	
+	@RequestMapping("/editEmployee")
+	public ModelAndView editEmployee(@RequestParam Long id,@RequestParam String name,
+			@RequestParam Double salary,@RequestParam String designation) {
+		Employee employee=employeeService.getEmployeeById(id);
+		employee.setName(name);
+		employee.setSalary(salary);
+		employee.setDesignation(designation);
+		employeeService.saveEmployee(employee);
+		return new ModelAndView("redirect:/");
+	}
 }
